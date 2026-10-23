@@ -14,6 +14,12 @@ class ProfileContractTests(unittest.TestCase):
         self.assertEqual(self.profile["status"], "experimental-specification")
         self.assertFalse(self.profile["bootstrap"]["independent_deku_rootfs"])
 
+    def test_bootstrap_stays_on_the_last_verified_fedora_baseline(self):
+        self.assertEqual(self.profile["bootstrap"]["distribution"], "fedora")
+        self.assertEqual(self.profile["bootstrap"]["release"], "44")
+        self.assertEqual(self.profile["bootstrap"]["package_manager"], "dnf")
+        self.assertFalse(self.profile["bootstrap"]["independent_deku_rootfs"])
+
     def test_initial_target_is_single_architecture_and_uefi(self):
         self.assertEqual(self.profile["target"]["architecture"], "x86_64")
         self.assertEqual(self.profile["target"]["firmware"], ["uefi"])
@@ -28,6 +34,8 @@ class ProfileContractTests(unittest.TestCase):
         self.assertTrue(packages)
         self.assertEqual(len(packages), len(set(packages)))
         self.assertTrue(all(isinstance(name, str) and name.strip() for name in packages))
+        self.assertIn("livesys-scripts", packages)
+        self.assertIn("tar", packages)
 
     def test_live_bootloader_stack_is_declared(self):
         packages = set(self.profile["package_selection"])
@@ -50,6 +58,8 @@ class ProfileContractTests(unittest.TestCase):
 
     def test_limits_are_documented(self):
         limitations = " ".join(self.profile["limitations"]).lower()
+        self.assertIn("not an independent deku distribution", limitations)
+        self.assertIn("repositories are not frozen snapshots", limitations)
         self.assertIn("does not produce an iso", limitations)
         self.assertIn("does not prove that deku-pkg", limitations)
 
