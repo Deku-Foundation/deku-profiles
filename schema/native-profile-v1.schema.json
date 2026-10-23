@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deku-foundation.github.io/schemas/native-profile-v1.schema.json",
+  "title": "Deku Native System Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "profile_id", "status", "target", "runtime", "package_closure", "build_policy", "integrity", "limitations"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "profile_id": {"const": "native-minimal-x86_64"},
+    "status": {"enum": ["proposed-native-profile", "locked-native-profile"]},
+    "target": {
+      "type": "object", "additionalProperties": false, "required": ["architecture", "firmware", "libc"],
+      "properties": {
+        "architecture": {"const": "x86_64"},
+        "firmware": {"const": ["uefi"]},
+        "libc": {"enum": ["glibc", "musl"]}
+      }
+    },
+    "runtime": {
+      "type": "object", "additionalProperties": false,
+      "required": ["distribution", "package_manager", "rootfs_source", "kernel", "initramfs", "service_manager", "desktop"],
+      "properties": {
+        "distribution": {"const": "deku"},
+        "package_manager": {"const": "deku-pkg"},
+        "rootfs_source": {"const": "deku-package-closure"},
+        "kernel": {"const": "upstream-linux"},
+        "initramfs": {"const": "dracut"},
+        "service_manager": {"const": "systemd"},
+        "desktop": {"const": "deferred"}
+      }
+    },
+    "package_closure": {
+      "type": "object", "additionalProperties": false, "required": ["status", "packages"],
+      "properties": {
+        "status": {"enum": ["not-yet-locked", "locked"]},
+        "packages": {
+          "type": "array", "maxItems": 4096, "uniqueItems": true,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["name", "version", "origin", "source_revision", "source_sha256", "artifact_sha256", "license", "dependencies"],
+            "properties": {
+              "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._+-]{0,127}$"},
+              "version": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9._+:-]+$"},
+              "origin": {"enum": ["deku-recipe", "upstream-source"]},
+              "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "license": {"type": "string", "minLength": 1, "maxLength": 128},
+              "dependencies": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._+-]{0,127}$"}}
+            }
+          }
+        }
+      }
+    },
+    "build_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_pins_required", "artifact_digests_required", "repository_trust", "build_network", "privilege"],
+      "properties": {
+        "source_pins_required": {"const": true},
+        "artifact_digests_required": {"const": true},
+        "repository_trust": {"const": "tuf"},
+        "build_network": {"const": "disabled-during-build"},
+        "privilege": {"const": "unprivileged"}
+      }
+    },
+    "integrity": {
+      "type": "object", "additionalProperties": false, "required": ["sbom_required", "provenance_required", "vm_boot_required"],
+      "properties": {
+        "sbom_required": {"const": true},
+        "provenance_required": {"const": true},
+        "vm_boot_required": {"const": true}
+      }
+    },
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 1000}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "proposed-native-profile"}}},
+      "then": {"properties": {"package_closure": {"properties": {"status": {"const": "not-yet-locked"}, "packages": {"maxItems": 0}}}}}
+    },
+    {
+      "if": {"properties": {"status": {"const": "locked-native-profile"}}},
+      "then": {"properties": {"package_closure": {"properties": {"status": {"const": "locked"}, "packages": {"minItems": 1}}}}}
+    }
+  ]
+}

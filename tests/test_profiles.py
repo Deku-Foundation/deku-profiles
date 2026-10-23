@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 PROFILE = Path(__file__).parents[1] / "profiles" / "minimal-x86_64" / "profile.json"
+NATIVE_PROFILE = Path(__file__).parents[1] / "profiles" / "native-minimal-x86_64" / "profile.json"
 
 
 class ProfileContractTests(unittest.TestCase):
@@ -62,6 +63,31 @@ class ProfileContractTests(unittest.TestCase):
         self.assertIn("repositories are not frozen snapshots", limitations)
         self.assertIn("does not produce an iso", limitations)
         self.assertIn("does not prove that deku-pkg", limitations)
+
+
+class NativeProfileContractTests(unittest.TestCase):
+    def setUp(self):
+        self.profile = json.loads(NATIVE_PROFILE.read_text(encoding="utf-8"))
+
+    def test_native_profile_is_separate_from_fedora_preview(self):
+        self.assertEqual(self.profile["profile_id"], "native-minimal-x86_64")
+        self.assertEqual(self.profile["status"], "proposed-native-profile")
+        self.assertEqual(self.profile["runtime"]["distribution"], "deku")
+        self.assertEqual(self.profile["runtime"]["rootfs_source"], "deku-package-closure")
+        self.assertEqual(self.profile["package_closure"]["status"], "not-yet-locked")
+        self.assertEqual(self.profile["package_closure"]["packages"], [])
+
+    def test_native_profile_requires_supply_chain_and_vm_evidence(self):
+        self.assertEqual(self.profile["build_policy"]["repository_trust"], "tuf")
+        self.assertEqual(self.profile["build_policy"]["build_network"], "disabled-during-build")
+        self.assertEqual(self.profile["build_policy"]["privilege"], "unprivileged")
+        self.assertTrue(all(self.profile["integrity"].values()))
+
+    def test_native_profile_does_not_claim_an_iso_exists(self):
+        limitations = " ".join(self.profile["limitations"]).lower()
+        self.assertIn("not a buildable package closure", limitations)
+        self.assertIn("no native deku package closure", limitations)
+        self.assertIn("separate test fixture", limitations)
 
 
 if __name__ == "__main__":
