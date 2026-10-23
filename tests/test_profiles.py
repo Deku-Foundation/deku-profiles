@@ -4,6 +4,7 @@ from pathlib import Path
 
 PROFILE = Path(__file__).parents[1] / "profiles" / "minimal-x86_64" / "profile.json"
 NATIVE_PROFILE = Path(__file__).parents[1] / "profiles" / "native-minimal-x86_64" / "profile.json"
+NATIVE_SCHEMA = Path(__file__).parents[1] / "schema" / "native-profile-v1.schema.json"
 
 
 class ProfileContractTests(unittest.TestCase):
@@ -82,6 +83,17 @@ class NativeProfileContractTests(unittest.TestCase):
         self.assertEqual(self.profile["build_policy"]["build_network"], "disabled-during-build")
         self.assertEqual(self.profile["build_policy"]["privilege"], "unprivileged")
         self.assertTrue(all(self.profile["integrity"].values()))
+
+    def test_native_schema_matches_profile_contract(self):
+        schema = json.loads(NATIVE_SCHEMA.read_text(encoding="utf-8"))
+        self.assertEqual(schema["$schema"], "https://json-schema.org/draft/2020-12/schema")
+        self.assertEqual(set(schema["required"]), set(self.profile))
+        self.assertEqual(schema["properties"]["profile_id"]["const"], self.profile["profile_id"])
+        self.assertEqual(schema["properties"]["runtime"]["properties"]["distribution"]["const"], "deku")
+        self.assertEqual(schema["properties"]["package_closure"]["properties"]["status"]["enum"],
+                         ["not-yet-locked", "locked"])
+        self.assertEqual(schema["properties"]["status"]["enum"],
+                         ["proposed-native-profile", "locked-native-profile"])
 
     def test_native_profile_does_not_claim_an_iso_exists(self):
         limitations = " ".join(self.profile["limitations"]).lower()

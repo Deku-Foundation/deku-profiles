@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://deku-foundation.github.io/schemas/native-profile-v1.schema.json",
+  "$id": "https://raw.githubusercontent.com/Deku-Foundation/deku-profiles/main/schema/native-profile-v1.schema.json",
   "title": "Deku Native System Profile v1",
   "type": "object",
   "additionalProperties": false,
