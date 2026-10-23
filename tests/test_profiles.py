@@ -31,7 +31,16 @@ class ProfileContractTests(unittest.TestCase):
 
     def test_live_bootloader_stack_is_declared(self):
         packages = set(self.profile["package_selection"])
-        self.assertTrue({"grub2-pc", "grub2-pc-modules", "grub2-tools", "grub2-efi-x64", "efibootmgr"} <= packages)
+        self.assertTrue({
+            "grub2-pc",
+            "grub2-pc-modules",
+            "grub2-tools",
+            "grub2-tools-extra",
+            "grub2-efi-x64",
+            "grub2-efi-x64-cdboot",
+            "grub2-efi-x64-modules",
+            "efibootmgr",
+        } <= packages)
 
     def test_integrity_evidence_is_required(self):
         integrity = self.profile["integrity"]
