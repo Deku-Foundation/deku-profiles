@@ -59,6 +59,7 @@
     "This profile selects Fedora 44 for an experimental upstream-based technology preview, not an independent Deku distribution.",
     "A Fedora 44 x86_64 ISO built from the prior pinned profile revision passed one QEMU UEFI console-boot smoke test; this exact profile revision must be tested before promotion.",
     "Fedora package repositories are not frozen snapshots; the resolved package inventory and source digests are required for each build.",
-    "It does not prove that deku-pkg can install or update a system."
+    "It does not prove that deku-pkg can install or update a system.",
+    "The profile itself does not produce an ISO; Lorax integration is a separate stage."
   ]
 }
