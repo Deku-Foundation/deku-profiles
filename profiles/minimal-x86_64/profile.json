@@ -11,7 +11,7 @@
   },
   "bootstrap": {
     "distribution": "fedora",
-    "release": "45",
+    "release": "44",
     "package_manager": "dnf",
     "image_builder_candidate": "lorax-livemedia-creator",
     "purpose": "technology-preview-only",
@@ -56,9 +56,9 @@
     "require_vm_boot_evidence": true
   },
   "limitations": [
-    "This is an experimental Fedora-based technology-preview input, not a validated ISO.",
-    "It does not produce an ISO by itself; the Lorax workflow is a separate build step.",
-    "It uses upstream Fedora packages and does not prove that Deku has an independent root filesystem.",
+    "This profile selects Fedora 44 for an experimental upstream-based technology preview, not an independent Deku distribution.",
+    "A Fedora 44 x86_64 ISO built from the prior pinned profile revision passed one QEMU UEFI console-boot smoke test; this exact profile revision must be tested before promotion.",
+    "Fedora package repositories are not frozen snapshots; the resolved package inventory and source digests are required for each build.",
     "It does not prove that deku-pkg can install or update a system."
   ]
 }
