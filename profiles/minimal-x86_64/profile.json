@@ -11,7 +11,7 @@
   },
   "bootstrap": {
     "distribution": "fedora",
-    "release": "44",
+    "release": "45",
     "package_manager": "dnf",
     "image_builder_candidate": "lorax-livemedia-creator",
     "purpose": "technology-preview-only",
@@ -43,6 +43,7 @@
     "iputils",
     "kernel",
     "kernel-modules",
+    "livesys-scripts",
     "shim-x64",
     "systemd",
     "tar",
@@ -55,9 +56,9 @@
     "require_vm_boot_evidence": true
   },
   "limitations": [
-    "This is a profile proposal, not a validated build input.",
-    "It does not produce an ISO.",
-    "It uses an upstream Fedora package ecosystem for the technology preview.",
+    "This is an experimental Fedora-based technology-preview input, not a validated ISO.",
+    "It does not produce an ISO by itself; the Lorax workflow is a separate build step.",
+    "It uses upstream Fedora packages and does not prove that Deku has an independent root filesystem.",
     "It does not prove that deku-pkg can install or update a system."
   ]
 }
