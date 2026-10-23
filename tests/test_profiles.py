@@ -29,6 +29,10 @@ class ProfileContractTests(unittest.TestCase):
         self.assertEqual(len(packages), len(set(packages)))
         self.assertTrue(all(isinstance(name, str) and name.strip() for name in packages))
 
+    def test_live_bootloader_stack_is_declared(self):
+        packages = set(self.profile["package_selection"])
+        self.assertTrue({"grub2-pc", "grub2-pc-modules", "grub2-tools", "grub2-efi-x64", "efibootmgr"} <= packages)
+
     def test_integrity_evidence_is_required(self):
         integrity = self.profile["integrity"]
         self.assertTrue(integrity["require_immutable_inputs"])
