@@ -4,7 +4,9 @@
   "status": "experimental-specification",
   "target": {
     "architecture": "x86_64",
-    "firmware": ["uefi"],
+    "firmware": [
+      "uefi"
+    ],
     "libc": "glibc"
   },
   "bootstrap": {
@@ -27,12 +29,22 @@
     "kernel-modules",
     "systemd",
     "dracut-network",
+    "dracut-config-generic",
+    "dracut-live",
     "NetworkManager",
     "bash",
     "coreutils",
     "util-linux",
     "iproute",
-    "iputils"
+    "iputils",
+    "tar",
+    "grub2-pc",
+    "grub2-pc-modules",
+    "grub2-tools",
+    "grub2-tools-extra",
+    "grub2-efi-x64",
+    "shim-x64",
+    "efibootmgr"
   ],
   "integrity": {
     "require_immutable_inputs": true,
