@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "profile_id": "minimal-x86_64",
+  "status": "experimental-specification",
+  "target": {
+    "architecture": "x86_64",
+    "firmware": ["uefi"],
+    "libc": "glibc"
+  },
+  "bootstrap": {
+    "distribution": "fedora",
+    "release": "44",
+    "package_manager": "dnf",
+    "image_builder_candidate": "lorax-livemedia-creator",
+    "purpose": "technology-preview-only",
+    "independent_deku_rootfs": false
+  },
+  "boot_target": {
+    "stage": "console",
+    "kernel_source": "upstream-linux",
+    "initramfs": "dracut",
+    "service_manager": "systemd",
+    "desktop": "deferred-until-console-boot-passes"
+  },
+  "package_selection": [
+    "kernel",
+    "kernel-modules",
+    "systemd",
+    "dracut-network",
+    "NetworkManager",
+    "bash",
+    "coreutils",
+    "util-linux",
+    "iproute",
+    "iputils"
+  ],
+  "integrity": {
+    "require_immutable_inputs": true,
+    "record_source_and_package_manifest": true,
+    "record_artifact_sha256": true,
+    "require_vm_boot_evidence": true
+  },
+  "limitations": [
+    "This is a profile proposal, not a validated build input.",
+    "It does not produce an ISO.",
+    "It uses an upstream Fedora package ecosystem for the technology preview.",
+    "It does not prove that deku-pkg can install or update a system."
+  ]
+}
