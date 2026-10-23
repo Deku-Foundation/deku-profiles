@@ -12,7 +12,7 @@ The prior pinned Fedora 44 profile revision `2924c0eabe745542f61985062ad164133e5
 
 The separate `profiles/native-minimal-x86_64/profile.json` is the proposed target architecture for Deku's own package closure and root filesystem. It deliberately has no locked packages yet and cannot build an ISO. It is not based on Fedora, Void or NixOS at runtime. The existing `minimal-x86_64` Fedora 44 profile remains only as a labelled technology-preview/boot-harness fixture and must not be promoted as the native profile.
 
-The native profile contract is checked by `deku-build validate-native-profile`. The command validates metadata only; it does not build packages, authenticate a repository, assemble a root filesystem or generate an ISO.
+The native profile schema is in `schema/native-profile-v1.schema.json`; the native profile contract is checked by `deku-build validate-native-profile`. The command validates metadata only; it does not build packages, authenticate a repository, assemble a root filesystem or generate an ISO.
 
 ## Responsibilities
 
