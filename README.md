@@ -1,6 +1,6 @@
 # Deku Profiles
 
-Declarative system and desktop profiles for Deku Linux.
+Deku Profiles stores declarative metadata for the system and desktop configurations planned for Deku Linux.
 
 ## Status
 
